@@ -1,15 +1,15 @@
 import Navbar from "./components/Navbar";
-import { CardGrid } from "./components";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeProvider } from "./MoviesContext";
+import Main from "./components/Main";
 
 function App() {
   return (
     <div className="App">
       <ThemeProvider>
         <Navbar />
-        <CardGrid />
+        <Main />
       </ThemeProvider>
     </div>
   );

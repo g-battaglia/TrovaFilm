@@ -20,7 +20,11 @@ const MovieCard = ({
 }: IProps) => {
   return (
     <Card className="" style={{ width: "18rem" }}>
-      <Card.Img variant="top" src={poster} />
+      <Card.Img
+        variant="top"
+        src={poster}
+        style={{ backgroundColor: "gray", height: "100%" }}
+      />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>{description}</Card.Text>
