@@ -1,4 +1,4 @@
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { TitleField, DecadeField, SortField } from "./";
 import { useState, useEffect } from "react";
@@ -10,6 +10,7 @@ import { useMovieArrayUpdate } from "../MoviesContext";
 const StyledForm = styled(Form)`
   display: flex;
   gap: 2rem;
+  align-items: center;
 
   input,
   select {
@@ -18,18 +19,24 @@ const StyledForm = styled(Form)`
 
   // Create media queries for mobile
   @media (max-width: 992px) {
+    align-items: stretch;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
+
     input,
     select {
       width: 100%;
+    }
+    .spinner {
+      align-self: center;
     }
   }
 `;
 
 const SearchMovieForm = () => {
+  const [loading, setLoading] = useState(false);
   const [decade, setDecade] = useState("All");
   const [sort, setSort] = useState("Rating");
   const [title, setTitle] = useState("Title");
@@ -61,7 +68,7 @@ const SearchMovieForm = () => {
       return +decade < movie.Year && movie.Year < +decade + 9;
     });
     console.log("filter");
-    console.log(filtered);
+    // console.log(filtered);
     return filtered;
   }
 
@@ -75,12 +82,19 @@ const SearchMovieForm = () => {
 
   async function onSubmit(event: any) {
     event.preventDefault();
+    setLoading(true);
     const moviesArray = await API.getFromApi(title);
     setMovies(moviesArray);
+    setLoading(false);
   }
 
   return (
     <StyledForm onSubmit={(e: any) => onSubmit(e)}>
+      {loading && (
+        <Spinner animation="border" role="status" className="spinner">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      )}
       <TitleField onChange={setTitle} />
       <DecadeField onChange={setDecade} />
       <SortField onChange={setSort} />
