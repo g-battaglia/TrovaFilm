@@ -16,7 +16,10 @@ const SortField = ({ onChange }: IProps) => {
       <Form.Select
         name="sort"
         aria-label="Floating label select example"
-        onChange={(e: any) => onChange(e.target.value)}
+        onChange={(e: any) => {
+          console.log(e.target.value);
+          onChange(e.target.value);
+        }}
       >
         {OPTIONS.map((option) => (
           <option value={option} key={option}>

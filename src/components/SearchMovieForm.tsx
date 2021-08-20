@@ -11,12 +11,21 @@ const StyledForm = styled(Form)`
   display: flex;
   gap: 2rem;
 
+  input,
+  select {
+    width: 10rem;
+  }
+
   // Create media queries for mobile
   @media (max-width: 992px) {
     flex-direction: column;
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
+    input,
+    select {
+      width: 100%;
+    }
   }
 `;
 
@@ -25,7 +34,8 @@ const SearchMovieForm = () => {
   const [sort, setSort] = useState("Rating");
   const [title, setTitle] = useState("Title");
   const [movies, setMovies] = useState([]);
-  const setFilteredMovies = useMovieArrayUpdate();
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const setGlobalMovies = useMovieArrayUpdate();
 
   function orderByType(data: any, sort: string) {
     switch (sort) {
@@ -56,14 +66,15 @@ const SearchMovieForm = () => {
   }
 
   useEffect(() => {
-    setMovies((prev) => orderByType(prev, sort));
-    setFilteredMovies(filterByDecade(movies, decade));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [decade, movies, sort]);
+    setFilteredMovies(() => orderByType(filterByDecade(movies, decade), sort));
+  }, [movies, sort, decade]);
+
+  useEffect(() => {
+    setGlobalMovies(filteredMovies);
+  }, [filteredMovies, setGlobalMovies]);
 
   async function onSubmit(event: any) {
     event.preventDefault();
-    console.log(sort, decade, title);
     const moviesArray = await API.getFromApi(title);
     setMovies(moviesArray);
   }
